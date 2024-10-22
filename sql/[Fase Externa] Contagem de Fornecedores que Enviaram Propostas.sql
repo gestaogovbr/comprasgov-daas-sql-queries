@@ -14,3 +14,4 @@ FROM ComprasGov_FaseExterna_VBL.compra AS c
 		ON pi.id_participacao = p.id
 
 ---------- Quantidade de fornecedores que ganharam alguma compra em 2023
+
