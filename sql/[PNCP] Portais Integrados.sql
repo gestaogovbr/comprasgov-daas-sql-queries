@@ -73,4 +73,23 @@ HAVING
 ORDER BY 
     u.id;
 
+### Script com PCA e Ata
+
+SELECT DISTINCT 
+    u.id, 
+    u.nomerazaosocial, 
+    u.cpfcnpj, 
+    u.datainclusao
+FROM 
+    PNCP_VBL.usuario u
+WHERE 
+    u.id IN (
+        SELECT usuarioid FROM PNCP_VBL.contrato WHERE excluido = 0
+        UNION
+        SELECT usuarioid FROM PNCP_VBL.compra WHERE excluido = 0
+        UNION
+        SELECT usuarioid FROM PNCP_VBL.planocontratacao WHERE excluido = 0
+        UNION
+        SELECT usuarioid FROM PNCP_VBL.ataregistropreco WHERE excluido = 0
+    );
 
