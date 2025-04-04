@@ -106,8 +106,55 @@ WHERE homologado = 'S'
   AND situacao = '1'
   ORDER BY login_homologador 
 
+SELECT 
+    login_homologador,
+    nome_homologador,
+    COUNT(DISTINCT numero_compra || '-' || ano_compra) AS total_compras,
+    COUNT(*) AS total_itens,
+    SUM(valor_estimado) AS total_valor_estimado
+FROM ComprasGov_FaseExterna_VBL.item
+WHERE homologado = 'S'
+  AND situacao_envio_resultado = 'SP'
+  AND codigo_modalidade IN (3, 5, 6, 20)
+  AND ano_compra = 2024
+  AND situacao = '1'
+GROUP BY login_homologador, nome_homologador
+ORDER BY total_valor_estimado DESC;
 
 
+SELECT 
+    login_homologador,
+    nome_homologador,
+    numero_uasg,
+    CASE codigo_modalidade
+         WHEN 3  THEN 'concorrência'
+         WHEN 5  THEN 'pregão'
+         WHEN 6  THEN 'dispensa'
+         WHEN 20 THEN 'concurso'
+         ELSE 'outra'
+    END AS modalidade,
+    COUNT(DISTINCT numero_compra || '-' || ano_compra) AS total_compras,
+    COUNT(*) AS total_itens,
+    SUM(valor_estimado) AS total_valor_estimado
+FROM ComprasGov_FaseExterna_VBL.item
+WHERE homologado = 'S'
+  AND situacao_envio_resultado = 'SP'
+  AND codigo_modalidade IN (3, 5, 6, 20)
+  AND ano_compra = 2024
+  AND situacao = '1'
+GROUP BY 
+    login_homologador, 
+    nome_homologador, 
+    numero_uasg, 
+    CASE codigo_modalidade
+         WHEN 3  THEN 'concorrência'
+         WHEN 5  THEN 'pregão'
+         WHEN 6  THEN 'dispensa'
+         WHEN 20 THEN 'concurso'
+         ELSE 'outra'
+    END
+ORDER BY 
+    total_valor_estimado DESC;
 
 
 
